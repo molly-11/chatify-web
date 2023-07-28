@@ -8,19 +8,32 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
+
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ChatIcon from "@mui/icons-material/Chat";
+import { useAuth } from "../context/AuthProvider";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useSignOut } from "react-firebase-hooks/auth";
+import auth from "../auth";
 
 const pages = [
   { name: "Login", path: "/login" },
   { name: "Chat", path: "/chat" },
 ];
-const settings = ["Profile", "Chat rooms", "Logout"];
+
 
 function ResponsiveAppBar() {
+
+  const user= useAuth();
+  const [signOut, loading] = useSignOut(auth);
+
+  const handleLogout = () => {
+    signOut();
+  };
+
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -133,7 +146,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <AccountCircleIcon alt="Remy Sharp"/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -152,11 +165,12 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem  >
+                 <Typography variant="contained"textAlign="center">Settings</Typography>
                 </MenuItem>
-              ))}
+                <MenuItem  >
+                 {user ? <Button disabled={loading} onClick={handleLogout} variant="contained" textAlign="center">Log Out</Button> : null}
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

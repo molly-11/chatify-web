@@ -6,7 +6,7 @@ import auth from "../auth";
 const AuthContext = createContext(null);
 
 function AuthProvider(props) {
-  const [user, loading] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
 
   return (
     <AuthContext.Provider value={user}>
