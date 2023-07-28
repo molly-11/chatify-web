@@ -14,6 +14,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { CssBaseline, GlobalStyles } from "@mui/material";
+import Room from "./pages/Room";
 
 
 const router = createBrowserRouter([
@@ -32,7 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/chat",
         element: <Chat />,
-      },
+      },{
+        path: "/chat/:id",
+        element: <Room/>,
+      }
     ],
   },
 ]);
