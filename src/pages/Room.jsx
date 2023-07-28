@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
 import store from "../firestore";
 import SendIcon from "@mui/icons-material/Send";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useAuth } from "../context/AuthProvider";
+import FileUpload from "../components/FileUpload";
+import Messages from "../components/Messages";
 
 const messagesCollref = collection(store, "chat-messages");
 
@@ -15,6 +17,8 @@ function Room() {
   const [room, loading] = useDocumentData(doc(store, "chat rooms", id));
   const [message, setMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [file, setFile]= useState("");
+
 
   const sendMessage = async () => {
     setLoading(true);
@@ -22,8 +26,18 @@ function Room() {
       message,
       uid: auth.uid,
       rooms: id,
+      created: serverTimestamp()
     });
+    if(file){
+      await addDoc(messagesCollref, {
+        file,
+        uid: auth.uid,
+        rooms: id,
+        created: serverTimestamp()
+      });
+    }
     setMessage("");
+    setFile("");
     setLoading(false);
   };
 
@@ -35,7 +49,7 @@ function Room() {
     <Box sx={{ p: 2 }}>
       <Paper elevation={4}>
         <Typography variant="h2">{room.name}</Typography>
-        <Box sx={{ p: 2 }}>Messages...</Box>
+        <Box sx={{ p: 2 }}><Messages roomId={id}/></Box>
         <Box sx={{ p: 2, display: "flex" }}>
           <TextField
             variant="outlined"
@@ -55,6 +69,9 @@ function Room() {
           >
             Send
           </Button>
+        </Box>
+        <Box sx={{ p: 2 }}>
+          <FileUpload onUploadDone={(url)=>{setFile(url)} } uid={auth.uid}/>
         </Box>
       </Paper>
     </Box>

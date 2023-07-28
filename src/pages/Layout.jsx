@@ -106,7 +106,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.name}</Typography>
+                  <Typography sx={{textAlign:"center"}}>{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -166,10 +166,10 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
                 <MenuItem  >
-                 <Typography variant="contained"textAlign="center">Settings</Typography>
+                 <Typography variant="contained"sx={{textAlign:"center"}}>Settings</Typography>
                 </MenuItem>
                 <MenuItem  >
-                 {user ? <Button disabled={loading} onClick={handleLogout} variant="contained" textAlign="center">Log Out</Button> : null}
+                 {user ? <Button disabled={loading} onClick={handleLogout} variant="contained" sx={{textAlign:"center"}}>Log Out</Button> : null}
                 </MenuItem>
             </Menu>
           </Box>
